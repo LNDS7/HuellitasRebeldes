@@ -8,8 +8,6 @@ class Contenido
         $pagina = "";
         $url = isset($_GET["url"]) ? $_GET["url"] : null;
         @$url = explode('/', $url);
-        var_dump($_SESSION["nivel"]);
-        var_dump($url);
 
         if (isset($_SESSION["usuario"])) {
             if ($_SESSION["nivel"] == "admin") {
@@ -17,13 +15,11 @@ class Contenido
             }else if ($_SESSION["nivel"] == "ayudante") {
                 $pagina = $this->cargarVistaAyudante($url);
             } else {
-                $pagina = $this->cargarVistaUsuario($url);
+                require_once("cerrar.php");
             }
         } else {
             require_once("View/login.php");
         }
-
-        var_dump($pagina);
         return $pagina;
     }
 

@@ -369,7 +369,7 @@ if (isset($_POST['actualizarCita'])) {
                     text: 'La cita ha sido actualizada exitosamente.',
                     icon: 'success'
                 }).then(() => {
-                    window.location.replace('Consulta');
+                    window.location.replace('Aprobadas');
                 });
               </script>";
         exit;
@@ -393,7 +393,7 @@ if (isset($_POST['actualizarCita'])) {
                     text: 'La cita ha sido eliminada exitosamente.',
                     icon: 'success'
                 }).then(() => {
-                    window.location.replace('Consulta');
+                    window.location.replace('Aprobadas');
                 });
               </script>";
         exit;
@@ -418,7 +418,7 @@ if (isset($_POST['actualizarCita'])) {
                     text: 'El veterinario ha sido asignado exitosamente.',
                     icon: 'success'
                 }).then(() => {
-                    window.location.replace('Consulta');
+                    window.location.replace('Aprobadas');
                 });
               </script>";
         exit;

@@ -1,4 +1,4 @@
-<?php
+<!--<?php
 // Asegúrate de tener esta clase definida
 
 $consultaController = new DiagnosticoController();
