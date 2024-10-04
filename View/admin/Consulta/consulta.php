@@ -92,19 +92,19 @@ h1{
 </head>
 <body>
 
-<button class="tablink" onclick="openPage('Home', this, 'lightseagreen')">Diagnosticos Realizados</button>
-<button class="tablink" onclick="openPage('News', this, 'lightseagreen')" id="defaultOpen">Diagnosticos Pendientes</button>
+<button class="tablink" onclick="openPage('Home', this, 'lightseagreen')">Consultas Realizadas</button>
+<button class="tablink" onclick="openPage('News', this, 'lightseagreen')" id="defaultOpen">Consultas Pendientes</button>
 <div id="Home" class="tabcontent">
     <?php
     // Crear una instancia del controlador de consultas
-    $diagnostico = new DiagnosticoController();
+    $consulta = new ConsultaController();
     // Obtener la lista de consultas
-    $listardiagnostico = $diagnostico->listar();
+    $listarconsultas = $consulta->listarconsulta();
     ?>
     <div class="container mt-3">
         <div class="card">
             <div class="card-header">
-                <h2>Diagnosticos Realizados</h2>
+                <h2>Consultas Realizadas</h2>
             </div>
             <div class="card-body">
                 <table class="table table-striped" id="myTable">
@@ -122,7 +122,7 @@ h1{
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($listardiagnostico as $info): ?>
+                        <?php foreach ($listarconsultas as $info): ?>
                         <tr>
                             <td><?php echo $info['NombreDueno']; ?></td>
                             <td><?php echo $info['NombreMascota']; ?></td>
@@ -133,14 +133,14 @@ h1{
                             <td class="fecha"><?php echo $info['FechaConsulta']; ?></td>
                             <td>
                                 <button class="btn btn-warning btn-update" 
-                                        data-id="<?php echo $info['IDCita']; ?>" 
+                                        data-id="<?php echo $info['IDConsulta']; ?>" 
                                         data-toggle="modal" data-target="#updateModal">
                                     Actualizar
                                 </button>
                             </td>
                             <td>
                                 <button class="btn btn-danger btn-delete" 
-                                        data-id="<?php echo $info['IDCita']; ?>" 
+                                        data-id="<?php echo $info['IDConsulta']; ?>" 
                                         data-toggle="modal" data-target="#deleteModal">
                                     Eliminar
                                 </button>
@@ -313,34 +313,32 @@ $(document).ready(function() {
     <div class="container mt-3">
         <div class="card">
             <div class="card-header">
-                <h2>Diagnosticos Pendientes</h2>
+                <h2>Consultas Pendientes</h2>
             </div>
             <div class="card-body">
                 <table class="table table-striped" id="myTable">
-                <thead>
+                    <thead>
                         <tr>
                             <th>Dueño</th>
                             <th>Mascota</th>
-                            <th>Razón de cita</th>
+                            <th>Razon de cita</th>
+                            <th>Fecha</th>
+                            <th>Hora</th>
                             <th>Veterinario</th>
-                            <th>Descripción de consulta</th>
-                            <th>Observación de consulta</th>
-                            <th>Fecha de consulta</th>
-                            <!--<th>Actualizar</th>
-                            <th>Eliminar</th>-->
-                            <th>Agregar</th>
+                            <!--<th>Actualizar</th>-->
+                            <!--<th>Eliminar</th>-->
+                            <th>Agregar Consulta</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($listardiagnostico as $info): ?>
+                        <?php foreach ($listar as $info): ?>
                         <tr>
-                            <td><?php echo $info['NombreDueno']; ?></td>
+                            <td><?php echo $info['Dueno']; ?></td>
                             <td><?php echo $info['NombreMascota']; ?></td>
-                            <td><?php echo $info['RazonCita']; ?></td>
-                            <td><?php echo $info['NombreVeterinario']; ?></td>
-                            <td class="descripcion"><?php echo $info['DescripcionConsulta']; ?></td>
-                            <td class="observacion"><?php echo $info['ObservacionesConsulta']; ?></td>
-                            <td class="fecha"><?php echo $info['FechaConsulta']; ?></td>
+                            <td><?php echo $info['razonCita']; ?></td>
+                            <td><?php echo $info['fecha']; ?></td>
+                            <td><?php echo $info['hora']; ?></td>
+                            <td><?php echo $info['Veterinario']; ?></td>
                             <!--<td>
                                 <button class="btn btn-warning btn-update" 
                                         data-id="<?php echo $info['idCita']; ?>"
@@ -348,8 +346,8 @@ $(document).ready(function() {
                                         data-toggle="modal" data-target="#updateModal">
                                     Actualizar
                                 </button>
-                            </td>
-                            <td>
+                            </td>-->
+                            <!--<td>
                                 <button class="btn btn-danger btn-delete" 
                                         data-id="<?php echo $info['idCita']; ?>"
                                         data-toggle="modal" data-target="#deleteModal">
@@ -358,10 +356,10 @@ $(document).ready(function() {
                             </td>-->
                             <td>
                                 <button class="btn btn-dark btn-agregar-consulta" 
-                                        data-id="<?php echo $info['IDCita']; ?>"
+                                        data-id="<?php echo $info['idCita']; ?>"
                                         data-nombre="<?php echo $info['NombreMascota']; ?>"
                                         data-toggle="modal" data-target="#agregarmascotamodal">
-                                    Agregar Diagnostico
+                                    Agregar Consulta
                                 </button>
                             </td>
                         </tr>
@@ -373,58 +371,83 @@ $(document).ready(function() {
     </div>
 </div>
 
-<!-- Modal para Agregar Diagnostico -->
+
+
+<!-- Modal para Agregar Consulta -->
 <div class="modal fade" id="agregarmascotamodal" tabindex="-1" role="dialog" aria-labelledby="agregarmascotamodalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="agregarmascotamodalLabel">Agregar Diagnostico</h5>
+                <h5 class="modal-title" id="agregarmascotamodalLabel">Agregar Consulta</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <form method="post" id="agregarConsultaForm">
                 <div class="modal-body">
-                    <input type="hidden" id="idCita" name="IDCita" value=""> <!-- Cambiado id --><!-- Cambiado id -->
+                    <input type="hidden" id="idDuenoMascota" name="idCita" value="">
                     <div class="form-group">
                         <label for="descripcion">Descripción:</label>
                         <input type="text" id="descripcion" name="descripcion" class="form-control" required>
                     </div>
+                    <div class="form-group">
+                        <label for="observacion">Observación:</label>
+                        <input type="text" id="observacion" name="observacion" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="fechaConsulta">Fecha de Consulta:</label>
+                        <input type="date" id="fechaConsulta" name="fecha" class="form-control" required>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                    <button type="submit" name="agregarDiagnostico" class="btn btn-primary">Agregar Diagnostico</button>
+                    <button type="submit" name="agregarConsulta" class="btn btn-primary">Agregar Consulta</button>
                 </div>
             </form>
         </div>
     </div>
-</div>
-
-<!-- Script para manejar eventos del modal y la tabla -->
+    
 <script>
 $(document).ready(function() {
-    // Inicializar DataTable
     $('#myTable').DataTable();
 
-    // Manejo de agregar diagnostico al abrir el modal
+    $(document).on('click', '.btn-update', function() {
+        var idConsulta = $(this).data('id'); // Obtener el ID de la consulta
+        var idCita = $(this).data('cita-id'); // Obtener el ID de la cita, si está disponible
+        var descripcion = $(this).closest('tr').find('.descripcion').text(); // Obtener descripción
+        var observacion = $(this).closest('tr').find('.observacion').text(); // Obtener observación
+        var fecha = $(this).closest('tr').find('.fecha').text(); // Obtener fecha
+
+        // Asignar valores a los campos del modal
+        $('#updateId').val(idConsulta);
+        $('#updateCitaId').val(idCita);
+        $('#updateDescripcion').val(descripcion);
+        $('#updateObservacion').val(observacion);
+        $('#updateFecha').val(fecha);
+    });
+
+    // Manejo de eliminación
+    $('.btn-delete').on('click', function() {
+        $('#deleteId').val($(this).data('id'));
+    });
+
+    // Manejo de agregar consulta
     $('.btn-agregar-consulta').on('click', function() {
         var idCita = $(this).data('id'); // Obtener el ID de la cita
-        $('#idCita').val(idCita); // Asignar el ID de la cita al campo oculto del formulario
+        $('#idDuenoMascota').val(idCita); // Asignar el ID de la cita al campo oculto del formulario de agregar consulta
     });
 });
 
-// Función para abrir y gestionar las pestañas (tabs)
 function openPage(pageName, elmnt, color) {
-    var tabcontent = document.getElementsByClassName("tabcontent");
-    for (var i = 0; i < tabcontent.length; i++) {
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
         tabcontent[i].style.display = "none";
     }
-    
-    var tablinks = document.getElementsByClassName("tablink");
-    for (var i = 0; i < tablinks.length; i++) {
+    tablinks = document.getElementsByClassName("tablink");
+    for (i = 0; i < tablinks.length; i++) {
         tablinks[i].style.backgroundColor = "";
     }
-
     document.getElementById(pageName).style.display = "block";
     elmnt.style.backgroundColor = color;
 }
@@ -434,17 +457,20 @@ document.getElementById("defaultOpen").click();
 
 
 <?php 
-$insertarDiagnostico = new DiagnosticoController();
+$insertarconsulta = new ConsultaController();
 // Procesar formulario para insertar Consulta
-if (isset($_POST['agregarDiagnostico'])) {
-    $diagnostico = new Diagnostico();
-    $diagnostico->setDescripcion($_POST['descripcion']);
+if (isset($_POST['agregarConsulta'])) {
+    $consulta = new Consulta();
+    $consulta->setDescripcion($_POST['descripcion']);
+    $consulta->setObservaciones($_POST['observacion']);
+    $consulta->setFecha($_POST['fecha']);
+    $consulta->setIdCita($_POST['idCita']);
 
-    if ($insertarDiagnostico->insertarDiagnostico($diagnostico)) {
+    if ($insertarconsulta->insertarConsulta($consulta)) {
         echo "<script>
                 Swal.fire({
                     title: 'Mascota Agregada!',
-                    text: 'El Diagnostico ha sido agregada exitosamente.',
+                    text: 'La Consulta ha sido agregada exitosamente.',
                     icon: 'success'
                 }).then(() => {
                     window.location.replace('Consulta');
@@ -455,7 +481,7 @@ if (isset($_POST['agregarDiagnostico'])) {
         echo "<script>
                 Swal.fire({
                     title: 'Error!',
-                    text: 'Error al agregar Diagnostico.',
+                    text: 'Error al agregar Consulta.',
                     icon: 'error'
                 });
               </script>";

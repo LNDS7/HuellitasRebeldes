@@ -46,6 +46,8 @@ class Contenido
                 return "View/admin/Aprobadas/Aprobadas.php";
             case "Diagnostico":
                 return "View/admin/Diagnostico/diagnostico.php";
+                case "Consulta":
+                    return "View/admin/Consulta/consulta.php";
             case "Cerrar_Sesion":
                 return "View/cerrar/cerrar.php";
             default:

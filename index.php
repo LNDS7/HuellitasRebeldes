@@ -33,7 +33,8 @@ if (isset($_SESSION["usuario"])) {
     } elseif ($_SESSION["nivel"] == "ayudante") {
         require_once("View/ayudante/index.php");
     }else {
-        require_once("View/usuario/index.php");
+        require_once("View/login.php");
+        //require_once("View/usuario/index.php");
     }
 } else {
     require_once("View/login.php");

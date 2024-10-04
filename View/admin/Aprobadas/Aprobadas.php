@@ -160,8 +160,8 @@ $veterinarios = $citaController->listarVeterinarios(); // Necesitamos este méto
                                 <th>Nombre de la Mascota</th>
                                 <th>Dueno</th>
                                 <th>Cliente</th>
-                                <th>Actualizar</th>
-                                <th>Eliminar</th>
+                                <!--<th>Actualizar</th>
+                                <th>Eliminar</th>-->
                                 <th>Agregar Veterinario</th>
                             </tr>
                         </thead>
@@ -174,7 +174,7 @@ $veterinarios = $citaController->listarVeterinarios(); // Necesitamos este méto
                                     <td><?php echo $info['NombreMascota']; ?></td>
                                     <td><?php echo $info['Dueno']; ?></td>
                                     <td><?php echo $info['Veterinario']; ?></td>
-                                    <td>
+                                    <!--<td>
                                         <button class="btn btn-primary btn-update" data-id="<?php echo $info['idCita']; ?>"
                                             data-fecha="<?php echo $info['fecha']; ?>" data-hora="<?php echo $info['hora']; ?>"
                                             data-razon="<?php echo $info['razonCita']; ?>" data-toggle="modal" data-target="#updateModal">
@@ -186,7 +186,7 @@ $veterinarios = $citaController->listarVeterinarios(); // Necesitamos este méto
                                             data-toggle="modal" data-target="#deleteModal">
                                             Eliminar
                                         </button>
-                                    </td>
+                                    </td>-->
                                     <td>
                                         <button class="btn btn-dark btn-agregar-veterinario" data-id="<?php echo $info['idCita']; ?>"
                                             data-toggle="modal" data-target="#assignVeterinarioModal">
