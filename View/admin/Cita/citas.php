@@ -398,6 +398,124 @@ if (isset($_POST['agendarcita'])) {
 } ?>
 </body>
 
+<?php
+// Instanciar el controlador de citas
+$citaController = new CitaController();
+
+// Si se recibe una petición AJAX para obtener las citas
+if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    // Llamar al método que devuelve las citas
+    $cale = $citaController->listarCitasParaCalendario();
+
+    // Asegurarse de que $cale es un array antes de usarlo
+    if (is_array($cale) && !empty($cale)) {
+        // Comenzar a generar la respuesta HTML
+        echo "<html lang='es'>";
+        echo "<head>";
+        echo "<meta charset='UTF-8'>";
+        echo "<title>Calendario de Citas</title>";
+        echo "<link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css' rel='stylesheet'>";
+        echo "<style>
+                /* Personalización del calendario */
+                #calendar {
+                    max-width: 900px;
+                    margin: 40px auto;
+                    padding: 20px;
+                    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+                    border-radius: 10px;
+                    background-color: #f9f9f9;
+                }
+                .fc-event {
+                    background-color: #3498db;
+                    border: none;
+                    color: black;
+                    font-weight: bold;
+                    padding: 5px;
+                    border-radius: 5px;
+                }
+                .fc-button {
+                    background-color: #2ecc71;
+                    border-color: #27ae60;
+                    color: black;
+                    font-size: 14px;
+                    border-radius: 5px;
+                }
+                .fc-button:hover {
+                    background-color: #27ae60;
+                }
+                .fc-toolbar-title {
+                    font-size: 20px;
+                    font-weight: bold;
+                    color: #2c3e50;
+                }
+                .fc-daygrid-day, .fc-timegrid-slot {
+                    font-size: 13px;
+                }
+                .fc-day-today {
+                    background-color: #f5f5f5 !important;
+                    border: 1px solid #ddd;
+                }
+              </style>";
+        echo "<script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js'></script>";
+        echo "</head>";
+        echo "<body>";
+
+        echo "<div id='calendar'></div>";
+
+        echo "<script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    var calendarEl = document.getElementById('calendar');
+
+                    var calendar = new FullCalendar.Calendar(calendarEl, {
+                        initialView: 'timeGridWeek',
+                        slotDuration: '00:90:00',
+                        headerToolbar: {
+                            left: 'prev,next today',
+                            center: 'title',
+                            right: 'timeGridDay,timeGridWeek,dayGridMonth'
+                        },
+                        allDaySlot: false,
+                        locale: 'es',
+                        nowIndicator: true,
+                        eventTimeFormat: {
+                            hour: '2-digit',
+                            minute: '2-digit',
+                            hour12: true
+                        },
+                        themeSystem: 'bootstrap',
+                        slotMinTime: '07:00:00',
+                        slotMaxTime: '18:00:00',
+                        height: 'auto',
+                        events: [";
+
+        // Imprimir eventos en el formato esperado por FullCalendar
+        foreach ($cale as $cita) {
+            echo "{
+                id: " . json_encode($cita['idCita']) . ",
+                start: " . json_encode($cita['start']) . ",
+                end: " . json_encode($cita['end']) . ",
+                title: " . json_encode($cita['title']) . "
+            },";
+        }
+
+        echo "]
+                    });
+
+                    calendar.render();
+                });
+              </script>";
+
+        echo "</body>";
+        echo "</html>";
+    } else {
+        // Manejar el caso en que no se obtuvo un array de citas
+        echo "No se encontraron citas.";
+    }
+
+    exit; // Termina el script después de enviar la respuesta
+}
+?>
+
 </html>
                 
 

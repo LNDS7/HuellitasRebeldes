@@ -204,6 +204,28 @@ WHERE
 
     return $citas;
 }
+public function listarCitasParaCalendario()
+{
+    $sql = "SELECT 
+                idCita, 
+                CONCAT(fecha, ' ', hora) AS start, 
+                ADDTIME(CONCAT(fecha, ' ', hora), '01:00:00') AS end, 
+                razonCita AS title 
+            FROM cita";
+
+    $result = $this->cn()->query($sql);
+
+    $citas = [];
+
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $citas[] = $row; // Agrega cada fila a la lista de citas
+        }
+    }
+
+    return $citas; // Devuelve un array de citas, no JSON
+}
+
 
 
     public function asignarVeterinario($idCita, $idVeterinario)

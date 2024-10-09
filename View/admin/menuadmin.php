@@ -21,7 +21,7 @@
             <center>
                 <li class="nav-item text-center mb-3">
                     <img src="logo/logo.jpg" alt="Avatar" class="avatar" width="100px" height="80px">
-                    <h5 class="text-black">ADMINISTRADOR: <?php print $_SESSION["loginusuario"];?></h5>
+                    <h5 class="text-black">ADMINISTRADOR: <?php print $_SESSION["loginusuario"]; ?></h5>
                 </li>
             </center>
             <hr>

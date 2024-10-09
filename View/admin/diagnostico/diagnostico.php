@@ -1,3 +1,6 @@
+
+
+
 <?php
 // Instanciar controladores
 $listarcliente = new ClientesController();
@@ -151,6 +154,7 @@ h1{
                 </table>
             </div>
         </div>
+
     </div>
     
     <!-- Modal para Actualizar -->
